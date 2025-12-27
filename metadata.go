@@ -1,9 +1,13 @@
 package imds
 
 func InstanceID() (string, error) {
-	return "", nil
+	return defaultImds.GetInstanceID()
 }
 
-func Hostname() (string, error) {
-	return "", nil
+func InstanceType() (string, error) {
+	return defaultImds.GetInstanceType()
+}
+
+func Region() (string, error) {
+	return defaultImds.GetRegion()
 }

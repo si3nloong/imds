@@ -63,6 +63,14 @@ func (c *AWS) GetHostname() (string, error) {
 	return string(b), nil
 }
 
+func (c *AWS) GetRegion() (string, error) {
+	b, err := c.curl("/latest/meta-data/placement/region")
+	if err != nil {
+		return "", err
+	}
+	return string(b), nil
+}
+
 func (c *AWS) GetLocalIPv4() (string, error) {
 	b, err := c.curl("/latest/meta-data/local-ipv4")
 	if err != nil {
@@ -169,7 +177,7 @@ func (c *AWS) curl(path string) ([]byte, error) {
 		return nil, fmt.Errorf(`unable to renew token: %w`, err)
 	}
 
-	req, err := http.NewRequest(http.MethodGet, "http://169.254.169.254"+path, nil)
+	req, err := http.NewRequest(http.MethodGet, AWSEndpoint+path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -184,6 +192,5 @@ func (c *AWS) curl(path string) ([]byte, error) {
 	if res.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("failed to get metadata: %s", res.Status)
 	}
-
 	return io.ReadAll(res.Body)
 }
