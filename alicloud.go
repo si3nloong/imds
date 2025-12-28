@@ -31,6 +31,14 @@ func (c *AliCloud) GetRegion() (string, error) {
 	return string(b), nil
 }
 
+func (c *AliCloud) GetZone() (string, error) {
+	b, err := curl(AliCloudEndpoint + "/latest/meta-data/zone-id")
+	if err != nil {
+		return "", err
+	}
+	return string(b), nil
+}
+
 func (c *AliCloud) GetHostname() (string, error) {
 	b, err := curl(AliCloudEndpoint + "/latest/meta-data/hostname")
 	if err != nil {

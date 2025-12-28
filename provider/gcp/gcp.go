@@ -1,5 +1,6 @@
+package gcp
+
 // Google Cloud Platform
-package imds
 
 type GCP struct {
 }

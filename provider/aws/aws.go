@@ -1,5 +1,4 @@
-// AWS
-package imds
+package aws
 
 import (
 	"encoding/json"
@@ -14,6 +13,8 @@ import (
 	"github.com/gofrs/flock"
 )
 
+const Endpoint = "http://169.254.169.254"
+
 type AWS struct {
 	rw          sync.RWMutex
 	token       string
@@ -22,6 +23,10 @@ type AWS struct {
 
 func (a *AWS) Provider() string {
 	return "AWS"
+}
+
+func New() *AWS {
+	return &AWS{}
 }
 
 type InstanceIdentityDocuments struct {
@@ -71,6 +76,14 @@ func (c *AWS) GetRegion() (string, error) {
 	return string(b), nil
 }
 
+func (c *AWS) GetZone() (string, error) {
+	b, err := c.curl("/latest/meta-data/placement/availability-zone")
+	if err != nil {
+		return "", err
+	}
+	return string(b), nil
+}
+
 func (c *AWS) GetLocalIPv4() (string, error) {
 	b, err := c.curl("/latest/meta-data/local-ipv4")
 	if err != nil {
@@ -79,7 +92,7 @@ func (c *AWS) GetLocalIPv4() (string, error) {
 	return string(b), nil
 }
 
-func (c *AWS) GetPublicIPv4() (string, error) {
+func (c *AWS) GetPublicIP() (string, error) {
 	b, err := c.curl("/latest/meta-data/public-ipv4")
 	if err != nil {
 		return "", err
@@ -177,7 +190,7 @@ func (c *AWS) curl(path string) ([]byte, error) {
 		return nil, fmt.Errorf(`unable to renew token: %w`, err)
 	}
 
-	req, err := http.NewRequest(http.MethodGet, AWSEndpoint+path, nil)
+	req, err := http.NewRequest(http.MethodGet, Endpoint+path, nil)
 	if err != nil {
 		return nil, err
 	}

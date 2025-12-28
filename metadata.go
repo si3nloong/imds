@@ -11,3 +11,11 @@ func InstanceType() (string, error) {
 func Region() (string, error) {
 	return defaultImds.GetRegion()
 }
+
+func Zone() (string, error) {
+	return defaultImds.GetZone()
+}
+
+func PublicIP() (string, error) {
+	return defaultImds.GetPublicIP()
+}

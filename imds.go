@@ -4,14 +4,13 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
-	"runtime"
 	"strings"
+
+	"github.com/si3nloong/imds/provider/aws"
+	"github.com/si3nloong/imds/provider/azure"
 )
 
 const (
-	AWSEndpoint      = "http://169.254.169.254"
-	AzureEndpoint    = "http://169.254.169.254"
 	AliCloudEndpoint = "http://100.100.100.200"
 )
 
@@ -22,26 +21,26 @@ type InstanceMetadataService interface {
 	GetInstanceID() (string, error)
 	GetInstanceType() (string, error)
 	GetRegion() (string, error)
+	GetZone() (string, error)
+	GetPublicIP() (string, error)
+}
+
+func Default() InstanceMetadataService {
+	return defaultImds
 }
 
 func init() {
-	switch runtime.GOOS {
-	case "windows":
-		// Not always the case because other cloud can also provide windows machine
-		defaultImds = &Azure{}
+	vendor, _ := instanceVendor()
+	vendor = strings.ToLower(strings.TrimSpace(vendor))
+	switch {
+	case strings.Contains(vendor, "amazon ec2"):
+		defaultImds = aws.New()
+	case strings.Contains(vendor, "alibaba cloud"):
+		defaultImds = &AliCloud{}
+	case strings.Contains(vendor, "microsoft corporation"):
+		defaultImds = azure.New()
 	default:
-		data, err := os.ReadFile("/sys/class/dmi/id/sys_vendor")
-		if err != nil {
-			panic(`missing vendor file`)
-		}
-		vendor := strings.ToLower(strings.TrimSpace(string(data)))
-		switch {
-		case strings.Contains(vendor, "amazon"):
-			defaultImds = &AWS{}
-		case strings.Contains(vendor, "alibaba"):
-			defaultImds = &AliCloud{}
-		default:
-		}
+		panic(fmt.Sprintf(`unsupported vendor %q`, vendor))
 	}
 }
 
