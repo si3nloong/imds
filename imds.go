@@ -6,12 +6,9 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/si3nloong/imds/provider/alicloud"
 	"github.com/si3nloong/imds/provider/aws"
 	"github.com/si3nloong/imds/provider/azure"
-)
-
-const (
-	AliCloudEndpoint = "http://100.100.100.200"
 )
 
 var defaultImds InstanceMetadataService
@@ -38,7 +35,7 @@ func init() {
 	case strings.Contains(vendor, "amazon ec2"):
 		defaultImds = aws.New()
 	case strings.Contains(vendor, "alibaba cloud"):
-		defaultImds = &AliCloud{}
+		defaultImds = alicloud.New()
 	case strings.Contains(vendor, "microsoft corporation"):
 		defaultImds = azure.New()
 	default:

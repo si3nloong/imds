@@ -1,3 +1,5 @@
+//go:build windows
+
 package imds
 
 import "github.com/si3nloong/imds/provider/os/macos"
