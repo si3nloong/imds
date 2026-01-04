@@ -21,12 +21,12 @@ type AWS struct {
 	expiresTime time.Time
 }
 
-func (a *AWS) Provider() string {
-	return "AWS"
-}
-
 func New() *AWS {
 	return &AWS{}
+}
+
+func (a *AWS) Provider() string {
+	return "AWS"
 }
 
 type InstanceIdentityDocuments struct {

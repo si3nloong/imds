@@ -19,15 +19,15 @@ const (
 type Azure struct {
 }
 
-func (a *Azure) Provider() string {
-	return "Azure"
-}
-
 func New() *Azure {
 	http.DefaultClient = &http.Client{
 		Transport: &http.Transport{Proxy: nil},
 	}
 	return &Azure{}
+}
+
+func (a Azure) Provider() string {
+	return "Azure"
 }
 
 type Metadata struct {

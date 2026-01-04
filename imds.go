@@ -23,6 +23,7 @@ type InstanceMetadataService interface {
 	GetRegion() (string, error)
 	GetZone() (string, error)
 	GetPublicIP() (string, error)
+	// GetPrivateIP() (string, error)
 }
 
 func Default() InstanceMetadataService {
@@ -31,6 +32,7 @@ func Default() InstanceMetadataService {
 
 func init() {
 	vendor, _ := instanceVendor()
+	println(vendor)
 	vendor = strings.ToLower(strings.TrimSpace(vendor))
 	switch {
 	case strings.Contains(vendor, "amazon ec2"):
@@ -40,7 +42,7 @@ func init() {
 	case strings.Contains(vendor, "microsoft corporation"):
 		defaultImds = azure.New()
 	default:
-		panic(fmt.Sprintf(`unsupported vendor %q`, vendor))
+		defaultImds = localMachine()
 	}
 }
 
