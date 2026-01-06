@@ -1,5 +1,9 @@
 package imds
 
+func Hostname() (string, error) {
+	return defaultImds.GetHostname()
+}
+
 func InstanceID() (string, error) {
 	return defaultImds.GetInstanceID()
 }
@@ -16,6 +20,18 @@ func Zone() (string, error) {
 	return defaultImds.GetZone()
 }
 
-func PublicIP() (string, error) {
+func PublicIPv4() (string, error) {
+	return defaultImds.GetPublicIP()
+}
+
+func PrivateIPv4() (string, error) {
+	return defaultImds.GetPublicIP()
+}
+
+func PublicIPv6() (string, error) {
+	return defaultImds.GetPublicIP()
+}
+
+func PrivateIPv6() (string, error) {
 	return defaultImds.GetPublicIP()
 }

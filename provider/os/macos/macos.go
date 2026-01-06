@@ -103,6 +103,15 @@ type MacOS struct {
 
 func (MacOS) Provider() string { return "macOS" }
 
+func (MacOS) GetHostname() (string, error) {
+	cmd := exec.Command("hostname")
+	output, err := cmd.Output()
+	if err != nil {
+		return "", err
+	}
+	return string(output), nil
+}
+
 func (MacOS) GetInstanceID() (string, error) {
 	return metadata.PlatformUUID, nil
 }

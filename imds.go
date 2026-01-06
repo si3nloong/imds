@@ -15,6 +15,7 @@ var defaultImds InstanceMetadataService
 
 type InstanceMetadataService interface {
 	Provider() string
+	GetHostname() (string, error)
 	GetInstanceID() (string, error)
 	GetInstanceType() (string, error)
 	GetRegion() (string, error)
