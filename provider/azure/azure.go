@@ -205,6 +205,14 @@ func (a *Azure) GetPublicIP() (string, error) {
 	return string(b), nil
 }
 
+func (a *Azure) GetPrivateIP() (string, error) {
+	b, err := a.curl("/metadata/instance/network/interface/0/ipv4/ipAddress/0/privateIpAddress", resultFormatText)
+	if err != nil {
+		return "", err
+	}
+	return string(b), nil
+}
+
 func (c *Azure) curl(path string, format resultFormat) ([]byte, error) {
 	req, err := http.NewRequest(http.MethodGet, Endpoint+path, nil)
 	if err != nil {

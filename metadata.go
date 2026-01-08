@@ -25,13 +25,13 @@ func PublicIPv4() (string, error) {
 }
 
 func PrivateIPv4() (string, error) {
-	return defaultImds.GetPublicIP()
+	return defaultImds.GetPrivateIP()
 }
 
-func PublicIPv6() (string, error) {
-	return defaultImds.GetPublicIP()
-}
+// func PublicIPv6() (string, error) {
+// 	return defaultImds.GetPublicIP()
+// }
 
-func PrivateIPv6() (string, error) {
-	return defaultImds.GetPublicIP()
-}
+// func PrivateIPv6() (string, error) {
+// 	return defaultImds.GetPublicIP()
+// }

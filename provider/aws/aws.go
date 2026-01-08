@@ -84,7 +84,7 @@ func (c *AWS) GetZone() (string, error) {
 	return string(b), nil
 }
 
-func (c *AWS) GetLocalIPv4() (string, error) {
+func (c *AWS) GetPrivateIP() (string, error) {
 	b, err := c.curl("/latest/meta-data/local-ipv4")
 	if err != nil {
 		return "", err

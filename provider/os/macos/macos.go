@@ -77,19 +77,19 @@ func GetMetadata() (Metadata, error) {
 			case RegulatoryModelNumber:
 				md.RegulatoryModelNumber = value
 			case RegionInfo:
-				bytes, err := hex.DecodeString(value)
+				b, err := hex.DecodeString(value)
 				if err == nil {
-					md.RegionInfo = string(bytes)
+					md.RegionInfo = string(bytes.TrimSpace(b))
 				}
 			case SerialNumber:
-				bytes, err := hex.DecodeString(value)
+				b, err := hex.DecodeString(value)
 				if err == nil {
-					md.SerialNumber = string(bytes)
+					md.SerialNumber = string(b)
 				}
 			case PlatformName:
-				bytes, err := hex.DecodeString(value)
+				b, err := hex.DecodeString(value)
 				if err == nil {
-					md.PlatformName = string(bytes)
+					md.PlatformName = string(b)
 				}
 			case Manufacturer:
 				md.Manufacturer = value
