@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/hex"
+	"net"
 	"os/exec"
 	"time"
 	"unsafe"
@@ -138,10 +139,13 @@ func (MacOS) GetPublicIP() (string, error) {
 }
 
 func (MacOS) GetPrivateIP() (string, error) {
-	cmd := exec.Command("curl", "ifconfig.me")
-	output, err := cmd.Output()
+	conn, err := net.Dial("udp", "8.8.8.8:80")
 	if err != nil {
 		return "", err
 	}
-	return string(output), nil
+	defer conn.Close()
+
+	// Get the local address used for this connection
+	localAddr := conn.LocalAddr().(*net.UDPAddr)
+	return localAddr.String(), nil
 }
