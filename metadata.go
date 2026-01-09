@@ -1,37 +1,25 @@
 package imds
 
-func Hostname() (string, error) {
-	return defaultImds.GetHostname()
-}
-
 func InstanceID() (string, error) {
-	return defaultImds.GetInstanceID()
+	return defaultImds.InstanceID()
 }
 
 func InstanceType() (string, error) {
-	return defaultImds.GetInstanceType()
+	return defaultImds.InstanceType()
 }
 
 func Region() (string, error) {
-	return defaultImds.GetRegion()
+	return defaultImds.Region()
 }
 
 func Zone() (string, error) {
-	return defaultImds.GetZone()
+	return defaultImds.Zone()
 }
 
 func PublicIPv4() (string, error) {
-	return defaultImds.GetPublicIP()
+	return defaultImds.PublicIP()
 }
 
 func PrivateIPv4() (string, error) {
-	return defaultImds.GetPrivateIP()
+	return defaultImds.PrivateIP()
 }
-
-// func PublicIPv6() (string, error) {
-// 	return defaultImds.GetPublicIP()
-// }
-
-// func PrivateIPv6() (string, error) {
-// 	return defaultImds.GetPublicIP()
-// }

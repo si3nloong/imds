@@ -157,7 +157,7 @@ func (a *Azure) GetMetadata() (Metadata, error) {
 	return o, nil
 }
 
-func (a *Azure) GetInstanceID() (string, error) {
+func (a *Azure) InstanceID() (string, error) {
 	b, err := a.curl("/metadata/instance/compute/vmId", resultFormatText)
 	if err != nil {
 		return "", err
@@ -165,7 +165,7 @@ func (a *Azure) GetInstanceID() (string, error) {
 	return string(b), nil
 }
 
-func (c *Azure) GetInstanceType() (string, error) {
+func (c *Azure) InstanceType() (string, error) {
 	b, err := c.curl("/metadata/instance/compute/vmSize", resultFormatText)
 	if err != nil {
 		return "", err
@@ -181,7 +181,7 @@ func (a *Azure) GetInstanceName() (string, error) {
 	return string(b), nil
 }
 
-func (a *Azure) GetRegion() (string, error) {
+func (a *Azure) Region() (string, error) {
 	b, err := a.curl("/metadata/instance/compute/location", resultFormatText)
 	if err != nil {
 		return "", err
@@ -189,7 +189,7 @@ func (a *Azure) GetRegion() (string, error) {
 	return string(b), nil
 }
 
-func (a *Azure) GetZone() (string, error) {
+func (a *Azure) Zone() (string, error) {
 	b, err := a.curl("/metadata/instance/compute/zone", resultFormatText)
 	if err != nil {
 		return "", err
@@ -197,7 +197,7 @@ func (a *Azure) GetZone() (string, error) {
 	return string(b), nil
 }
 
-func (a *Azure) GetPublicIP() (string, error) {
+func (a *Azure) PublicIP() (string, error) {
 	b, err := a.curl("/metadata/loadbalancer", resultFormatText)
 	if err != nil {
 		return "", err
@@ -205,7 +205,7 @@ func (a *Azure) GetPublicIP() (string, error) {
 	return string(b), nil
 }
 
-func (a *Azure) GetPrivateIP() (string, error) {
+func (a *Azure) PrivateIP() (string, error) {
 	b, err := a.curl("/metadata/instance/network/interface/0/ipv4/ipAddress/0/privateIpAddress", resultFormatText)
 	if err != nil {
 		return "", err

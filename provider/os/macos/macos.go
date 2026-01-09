@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/hex"
+	"errors"
 	"net"
 	"os/exec"
 	"time"
@@ -79,7 +80,7 @@ func GetMetadata() (Metadata, error) {
 			case RegionInfo:
 				b, err := hex.DecodeString(value)
 				if err == nil {
-					md.RegionInfo = string(bytes.TrimSpace(b))
+					md.RegionInfo = string(bytes.TrimRight(b, "\x00"))
 				}
 			case SerialNumber:
 				b, err := hex.DecodeString(value)
@@ -99,37 +100,27 @@ func GetMetadata() (Metadata, error) {
 	return md, nil
 }
 
-type MacOS struct {
-}
+type MacOS struct{}
 
 func (MacOS) Provider() string { return "macOS" }
 
-func (MacOS) GetHostname() (string, error) {
-	cmd := exec.Command("hostname")
-	output, err := cmd.Output()
-	if err != nil {
-		return "", err
-	}
-	return string(output), nil
-}
-
-func (MacOS) GetInstanceID() (string, error) {
+func (MacOS) InstanceID() (string, error) {
 	return metadata.PlatformUUID, nil
 }
 
-func (MacOS) GetInstanceType() (string, error) {
+func (MacOS) InstanceType() (string, error) {
 	return metadata.Model, nil
 }
 
-func (MacOS) GetRegion() (string, error) {
+func (MacOS) Region() (string, error) {
 	return metadata.RegionInfo, nil
 }
 
-func (MacOS) GetZone() (string, error) {
+func (MacOS) Zone() (string, error) {
 	return "", nil
 }
 
-func (MacOS) GetPublicIP() (string, error) {
+func (MacOS) PublicIP() (string, error) {
 	cmd := exec.Command("curl", "ifconfig.me")
 	output, err := cmd.Output()
 	if err != nil {
@@ -138,14 +129,21 @@ func (MacOS) GetPublicIP() (string, error) {
 	return string(output), nil
 }
 
-func (MacOS) GetPrivateIP() (string, error) {
-	conn, err := net.Dial("udp", "8.8.8.8:80")
+func (MacOS) PrivateIP() (string, error) {
+	// Get all network interfaces
+	addrs, err := net.InterfaceAddrs()
 	if err != nil {
 		return "", err
 	}
-	defer conn.Close()
 
-	// Get the local address used for this connection
-	localAddr := conn.LocalAddr().(*net.UDPAddr)
-	return localAddr.String(), nil
+	for _, addr := range addrs {
+		// Check if the address is a network IP address
+		if ipnet, ok := addr.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+			// Check if it is an IPv4 address and not link-local (169.254.x.x)
+			if ipnet.IP.To4() != nil && !ipnet.IP.IsLinkLocalUnicast() {
+				return ipnet.IP.String(), nil
+			}
+		}
+	}
+	return "", errors.New(`unable to find machine local ip`)
 }

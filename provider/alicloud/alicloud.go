@@ -10,67 +10,62 @@ const (
 	Endpoint = "http://100.100.100.200"
 )
 
-type AliCloud struct {
-}
-
-func New() *AliCloud {
-	return &AliCloud{}
-}
+type AliCloud struct{}
 
 func (a AliCloud) Provider() string {
 	return "Alibaba Cloud"
 }
 
-func (c *AliCloud) GetInstanceID() (string, error) {
-	b, err := curl(Endpoint + "/latest/meta-data/instance-id")
-	if err != nil {
-		return "", err
-	}
-	return string(b), nil
-}
-
-func (c *AliCloud) GetInstanceType() (string, error) {
-	b, err := curl(Endpoint + "/latest/meta-data/instance-type")
-	if err != nil {
-		return "", err
-	}
-	return string(b), nil
-}
-
-func (c *AliCloud) GetRegion() (string, error) {
-	b, err := curl(Endpoint + "/latest/meta-data/region-id")
-	if err != nil {
-		return "", err
-	}
-	return string(b), nil
-}
-
-func (c *AliCloud) GetZone() (string, error) {
-	b, err := curl(Endpoint + "/latest/meta-data/zone-id")
-	if err != nil {
-		return "", err
-	}
-	return string(b), nil
-}
-
 func (c *AliCloud) GetHostname() (string, error) {
-	b, err := curl(Endpoint + "/latest/meta-data/hostname")
+	b, err := curl("/latest/meta-data/hostname")
 	if err != nil {
 		return "", err
 	}
 	return string(b), nil
 }
 
-func (c *AliCloud) GetPublicIP() (string, error) {
-	b, err := curl(Endpoint + "/latest/meta-data/eipv4")
+func (c *AliCloud) InstanceID() (string, error) {
+	b, err := curl("/latest/meta-data/instance-id")
 	if err != nil {
 		return "", err
 	}
 	return string(b), nil
 }
 
-func (c *AliCloud) GetPrivateIP() (string, error) {
-	b, err := curl(Endpoint + "/latest/meta-data/private-ipv4")
+func (c *AliCloud) InstanceType() (string, error) {
+	b, err := curl("/latest/meta-data/instance-type")
+	if err != nil {
+		return "", err
+	}
+	return string(b), nil
+}
+
+func (c *AliCloud) Region() (string, error) {
+	b, err := curl("/latest/meta-data/region-id")
+	if err != nil {
+		return "", err
+	}
+	return string(b), nil
+}
+
+func (c *AliCloud) Zone() (string, error) {
+	b, err := curl("/latest/meta-data/zone-id")
+	if err != nil {
+		return "", err
+	}
+	return string(b), nil
+}
+
+func (c *AliCloud) PublicIP() (string, error) {
+	b, err := curl("/latest/meta-data/eipv4")
+	if err != nil {
+		return "", err
+	}
+	return string(b), nil
+}
+
+func (c *AliCloud) PrivateIP() (string, error) {
+	b, err := curl("/latest/meta-data/private-ipv4")
 	if err != nil {
 		return "", err
 	}
@@ -78,7 +73,7 @@ func (c *AliCloud) GetPrivateIP() (string, error) {
 }
 
 func (c *AliCloud) GetImageID() (string, error) {
-	b, err := curl(Endpoint + "/latest/meta-data/image-id")
+	b, err := curl("/latest/meta-data/image-id")
 	if err != nil {
 		return "", err
 	}
@@ -86,7 +81,7 @@ func (c *AliCloud) GetImageID() (string, error) {
 }
 
 func curl(url string, onBeforeRequest ...func(*http.Request)) ([]byte, error) {
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+	req, err := http.NewRequest(http.MethodGet, Endpoint+url, nil)
 	if err != nil {
 		return nil, err
 	}

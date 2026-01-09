@@ -2,8 +2,8 @@
 
 package imds
 
-import "github.com/si3nloong/imds/provider/os/macos"
+import "github.com/si3nloong/imds/provider/os/windows"
 
 func localMachine() InstanceMetadataService {
-	return macos.MacOS{}
+	return &windows.Windows{}
 }

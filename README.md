@@ -9,5 +9,10 @@ go get github.com/si3nloong/imds
 ## Usage
 
 ```go
-instanceID, _ := imds.InstanceID()
+import "github.com/si3nloong/imds"
+
+func main() {
+    instanceID, _ := imds.InstanceID()
+    println(instanceID) // A8AE896D-1C03-50A2-83CE-5FB4D52A6442
+}
 ```
