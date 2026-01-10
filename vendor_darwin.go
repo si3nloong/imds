@@ -2,12 +2,8 @@
 
 package imds
 
-import "os"
+import "golang.org/x/sys/unix"
 
 func instanceVendor() (string, error) {
-	vendor, err := os.ReadFile("/sys/class/dmi/id/sys_vendor")
-	if err != nil {
-		return "", err
-	}
-	return string(vendor), nil
+	return unix.Sysctl("machdep.cpu.vendor")
 }
