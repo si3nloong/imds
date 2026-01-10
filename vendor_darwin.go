@@ -5,5 +5,9 @@ package imds
 import "golang.org/x/sys/unix"
 
 func instanceVendor() (string, error) {
-	return unix.Sysctl("machdep.cpu.vendor")
+	vendor, err := unix.Sysctl("machdep.cpu.vendor")
+	if err == nil {
+		return vendor, nil
+	}
+	return unix.Sysctl("machdep.cpu.brand_string")
 }
