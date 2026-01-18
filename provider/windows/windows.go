@@ -14,7 +14,7 @@ type Windows struct{}
 
 func (Windows) Provider() string { return "windows" }
 
-func (Windows) InstanceID() (string, error) {
+func (Windows) GetInstanceID() (string, error) {
 	keys, err := registry.OpenKey(registry.LOCAL_MACHINE, `HARDWARE\DESCRIPTION\System\BIOS`, registry.QUERY_VALUE)
 	if err != nil {
 		return "", err
@@ -25,7 +25,7 @@ func (Windows) InstanceID() (string, error) {
 	return productID, err
 }
 
-func (Windows) InstanceType() (string, error) {
+func (Windows) GetInstanceType() (string, error) {
 	keys, err := registry.OpenKey(registry.LOCAL_MACHINE, `HARDWARE\DESCRIPTION\System\BIOS`, registry.QUERY_VALUE)
 	if err != nil {
 		return "", err
@@ -36,15 +36,15 @@ func (Windows) InstanceType() (string, error) {
 	return productID, err
 }
 
-func (Windows) Region() (string, error) {
-	return "", nil
+func (Windows) GetRegion() (string, error) {
+	return "", errors.New(`no zone info available on windows`)
 }
 
-func (Windows) Zone() (string, error) {
-	return "", nil
+func (Windows) GetZone() (string, error) {
+	return "", errors.New(`no zone info available on windows`)
 }
 
-func (Windows) PublicIP() (string, error) {
+func (Windows) GetPublicIP() (string, error) {
 	cmd := exec.Command("curl", "ifconfig.me")
 	output, err := cmd.Output()
 	if err != nil {
@@ -53,7 +53,7 @@ func (Windows) PublicIP() (string, error) {
 	return string(output), nil
 }
 
-func (Windows) PrivateIP() (string, error) {
+func (Windows) GetPrivateIP() (string, error) {
 	// Get all network interfaces
 	addrs, err := net.InterfaceAddrs()
 	if err != nil {

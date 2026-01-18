@@ -70,7 +70,7 @@ func GetMetadata() (Metadata, error) {
 			case Model:
 				md.Model = value
 			case Timestamp:
-				// md.Timestamp = value
+				md.Timestamp, _ = time.Parse("Mon Jan 02 15:04:05 MST 2006", value)
 			case DeviceType:
 				md.DeviceType = value
 			case Compatible:
@@ -104,23 +104,27 @@ type MacOS struct{}
 
 func (MacOS) Provider() string { return "macOS" }
 
-func (MacOS) InstanceID() (string, error) {
+func (MacOS) GetMetadata() (Metadata, error) {
+	return GetMetadata()
+}
+
+func (MacOS) GetInstanceID() (string, error) {
 	return metadata.PlatformUUID, nil
 }
 
-func (MacOS) InstanceType() (string, error) {
+func (MacOS) GetInstanceType() (string, error) {
 	return metadata.Model, nil
 }
 
-func (MacOS) Region() (string, error) {
+func (MacOS) GetRegion() (string, error) {
 	return metadata.RegionInfo, nil
 }
 
-func (MacOS) Zone() (string, error) {
-	return "", nil
+func (MacOS) GetZone() (string, error) {
+	return "", errors.New(`no zone info available on macOS`)
 }
 
-func (MacOS) PublicIP() (string, error) {
+func (MacOS) GetPublicIP() (string, error) {
 	cmd := exec.Command("curl", "ifconfig.me")
 	output, err := cmd.Output()
 	if err != nil {
@@ -129,7 +133,7 @@ func (MacOS) PublicIP() (string, error) {
 	return string(output), nil
 }
 
-func (MacOS) PrivateIP() (string, error) {
+func (MacOS) GetPrivateIP() (string, error) {
 	// Get all network interfaces
 	addrs, err := net.InterfaceAddrs()
 	if err != nil {

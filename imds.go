@@ -12,12 +12,12 @@ var defaultImds InstanceMetadataService
 
 type InstanceMetadataService interface {
 	Provider() string
-	InstanceID() (string, error)
-	InstanceType() (string, error)
-	Region() (string, error)
-	Zone() (string, error)
-	PublicIP() (string, error)
-	PrivateIP() (string, error)
+	GetInstanceID() (string, error)
+	GetInstanceType() (string, error)
+	GetRegion() (string, error)
+	GetZone() (string, error)
+	GetPublicIP() (string, error)
+	GetPrivateIP() (string, error)
 }
 
 func Default() InstanceMetadataService {

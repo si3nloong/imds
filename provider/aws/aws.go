@@ -64,7 +64,7 @@ func (c *AWS) GetHostname() (string, error) {
 	return string(b), nil
 }
 
-func (c *AWS) Region() (string, error) {
+func (c *AWS) GetRegion() (string, error) {
 	b, err := c.curl("/latest/meta-data/placement/region")
 	if err != nil {
 		return "", err
@@ -72,7 +72,7 @@ func (c *AWS) Region() (string, error) {
 	return string(b), nil
 }
 
-func (c *AWS) Zone() (string, error) {
+func (c *AWS) GetZone() (string, error) {
 	b, err := c.curl("/latest/meta-data/placement/availability-zone")
 	if err != nil {
 		return "", err
@@ -80,7 +80,7 @@ func (c *AWS) Zone() (string, error) {
 	return string(b), nil
 }
 
-func (c *AWS) PrivateIP() (string, error) {
+func (c *AWS) GetPrivateIP() (string, error) {
 	b, err := c.curl("/latest/meta-data/local-ipv4")
 	if err != nil {
 		return "", err
@@ -88,7 +88,7 @@ func (c *AWS) PrivateIP() (string, error) {
 	return string(b), nil
 }
 
-func (c *AWS) PublicIP() (string, error) {
+func (c *AWS) GetPublicIP() (string, error) {
 	b, err := c.curl("/latest/meta-data/public-ipv4")
 	if err != nil {
 		return "", err
@@ -96,7 +96,7 @@ func (c *AWS) PublicIP() (string, error) {
 	return string(b), nil
 }
 
-func (c *AWS) GetMAC() (string, error) {
+func (c *AWS) GetMACAddress() (string, error) {
 	b, err := c.curl("/latest/meta-data/mac")
 	if err != nil {
 		return "", err
@@ -104,7 +104,7 @@ func (c *AWS) GetMAC() (string, error) {
 	return string(b), nil
 }
 
-func (c *AWS) InstanceID() (string, error) {
+func (c *AWS) GetInstanceID() (string, error) {
 	b, err := c.curl("/latest/meta-data/instance-id")
 	if err != nil {
 		return "", err
@@ -112,7 +112,7 @@ func (c *AWS) InstanceID() (string, error) {
 	return string(b), nil
 }
 
-func (c *AWS) InstanceType() (string, error) {
+func (c *AWS) GetInstanceType() (string, error) {
 	b, err := c.curl("/latest/meta-data/instance-type")
 	if err != nil {
 		return "", err

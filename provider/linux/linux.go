@@ -12,7 +12,7 @@ type Linux struct{}
 
 func (Linux) Provider() string { return "Linux" }
 
-func (Linux) InstanceID() (string, error) {
+func (Linux) GetInstanceID() (string, error) {
 	// Try to read machine-id
 	id, err := os.ReadFile("/etc/machine-id")
 	if err == nil {
@@ -25,19 +25,19 @@ func (Linux) InstanceID() (string, error) {
 	return "", nil
 }
 
-func (Linux) InstanceType() (string, error) {
+func (Linux) GetInstanceType() (string, error) {
 	return "", nil
 }
 
-func (Linux) Region() (string, error) {
-	return "", nil
+func (Linux) GetRegion() (string, error) {
+	return "", errors.New(`no region info available on Linux`)
 }
 
-func (Linux) Zone() (string, error) {
-	return "", nil
+func (Linux) GetZone() (string, error) {
+	return "", errors.New(`no zone info available on Linux`)
 }
 
-func (Linux) PublicIP() (string, error) {
+func (Linux) GetPublicIP() (string, error) {
 	cmd := exec.Command("curl", "ifconfig.me")
 	output, err := cmd.Output()
 	if err != nil {
@@ -46,7 +46,7 @@ func (Linux) PublicIP() (string, error) {
 	return string(output), nil
 }
 
-func (Linux) PrivateIP() (string, error) {
+func (Linux) GetPrivateIP() (string, error) {
 	// Get all network interfaces
 	addrs, err := net.InterfaceAddrs()
 	if err != nil {

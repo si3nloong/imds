@@ -16,15 +16,7 @@ func (a AliCloud) Provider() string {
 	return "Alibaba Cloud"
 }
 
-func (c *AliCloud) GetHostname() (string, error) {
-	b, err := curl("/latest/meta-data/hostname")
-	if err != nil {
-		return "", err
-	}
-	return string(b), nil
-}
-
-func (c *AliCloud) InstanceID() (string, error) {
+func (c *AliCloud) GetInstanceID() (string, error) {
 	b, err := curl("/latest/meta-data/instance-id")
 	if err != nil {
 		return "", err
@@ -32,7 +24,7 @@ func (c *AliCloud) InstanceID() (string, error) {
 	return string(b), nil
 }
 
-func (c *AliCloud) InstanceType() (string, error) {
+func (c *AliCloud) GetInstanceType() (string, error) {
 	b, err := curl("/latest/meta-data/instance-type")
 	if err != nil {
 		return "", err
@@ -40,7 +32,7 @@ func (c *AliCloud) InstanceType() (string, error) {
 	return string(b), nil
 }
 
-func (c *AliCloud) Region() (string, error) {
+func (c *AliCloud) GetRegion() (string, error) {
 	b, err := curl("/latest/meta-data/region-id")
 	if err != nil {
 		return "", err
@@ -48,7 +40,7 @@ func (c *AliCloud) Region() (string, error) {
 	return string(b), nil
 }
 
-func (c *AliCloud) Zone() (string, error) {
+func (c *AliCloud) GetZone() (string, error) {
 	b, err := curl("/latest/meta-data/zone-id")
 	if err != nil {
 		return "", err
@@ -56,7 +48,7 @@ func (c *AliCloud) Zone() (string, error) {
 	return string(b), nil
 }
 
-func (c *AliCloud) PublicIP() (string, error) {
+func (c *AliCloud) GetPublicIP() (string, error) {
 	b, err := curl("/latest/meta-data/eipv4")
 	if err != nil {
 		return "", err
@@ -64,7 +56,7 @@ func (c *AliCloud) PublicIP() (string, error) {
 	return string(b), nil
 }
 
-func (c *AliCloud) PrivateIP() (string, error) {
+func (c *AliCloud) GetPrivateIP() (string, error) {
 	b, err := curl("/latest/meta-data/private-ipv4")
 	if err != nil {
 		return "", err
